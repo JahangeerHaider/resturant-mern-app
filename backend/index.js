@@ -4,11 +4,17 @@ import cookieParser from 'cookie-parser';
 import { connectDB } from './config/db.js';
 import dotenv from 'dotenv';
 import authRoute from './routes/authRoute.js';
+import categoryRoute from './routes/categoryRoute.js';
+import connectCloudinary from './config/cloudinary.js';
+import menuRoute from './routes/menuRoute.js';
+
 dotenv.config();
 
 const app = express();
 // DB connection
 connectDB();
+// cloudinary connection
+connectCloudinary();
 
 // middlewares
 app.use(express.json());
@@ -22,6 +28,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoute);
+app.use('/api/category', categoryRoute);
+app.use('/api/menu',menuRoute)
 
 app.listen(PORT, () => {
   console.log(`server is runing on port ${PORT}`);
