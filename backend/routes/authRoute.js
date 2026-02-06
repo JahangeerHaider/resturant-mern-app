@@ -2,6 +2,7 @@ import express from 'express';
 import {
   adminLogin,
   getProfile,
+  isAuth,
   loginUser,
   logoutUser,
   registerUser,
@@ -15,5 +16,6 @@ authRoute.post('/login', loginUser);
 authRoute.post('/admin/login', adminLogin);
 authRoute.post('/logout', logoutUser);
 authRoute.get('/profile', protect, getProfile);
+authRoute.get('/is-auth', protect, isAuth);
 
 export default authRoute;

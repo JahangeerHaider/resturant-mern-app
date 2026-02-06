@@ -7,6 +7,9 @@ import authRoute from './routes/authRoute.js';
 import categoryRoute from './routes/categoryRoute.js';
 import connectCloudinary from './config/cloudinary.js';
 import menuRoute from './routes/menuRoute.js';
+import cartRoute from './routes/cartRoute.js';
+import orderRoute from './routes/orderRoute.js';
+import bookingRoute from './routes/bookingRoute.js';
 
 dotenv.config();
 
@@ -18,7 +21,10 @@ connectCloudinary();
 
 // middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:"http://localhost:5173",
+  credentials:true
+}));
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 5000;
@@ -29,7 +35,10 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoute);
 app.use('/api/category', categoryRoute);
-app.use('/api/menu',menuRoute)
+app.use('/api/menu', menuRoute);
+app.use('/api/cart', cartRoute);
+app.use('/api/order', orderRoute);
+app.use('/api/booking', bookingRoute);
 
 app.listen(PORT, () => {
   console.log(`server is runing on port ${PORT}`);

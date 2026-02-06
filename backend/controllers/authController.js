@@ -75,8 +75,8 @@ export const loginUser = async (req, res) => {
 
     generateToken(res, { id: user._id, role: user.isAdmin ? 'Admin' : 'user' });
     return res.status(200).json({
-      message: 'login successfully',
-      succes: true,
+      message: 'Login successfully',
+      success: true,
       user: {
         name: user.name,
         email: user.email,
@@ -119,9 +119,13 @@ export const adminLogin = async (req, res) => {
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000,
     });
-    return res
-      .status(200)
-      .json({ message: 'admin login successfully', success: true });
+    return res.status(200).json({
+      admin: {
+        admin: adminEmail,
+      },
+      message: 'admin login successfully',
+      success: true,
+    });
   } catch (error) {
     console.log(error.message);
     return res
@@ -157,5 +161,15 @@ export const getProfile = async (req, res) => {
     return res
       .status(500)
       .json({ message: 'internal server error', success: false });
+  }
+};
+
+export const isAuth = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const user = await User.findById(id).select('-password');
+    res.json({ success: true, user });
+  } catch (error) {
+    return res.json({ message: 'Internal server error', success: false });
   }
 };
