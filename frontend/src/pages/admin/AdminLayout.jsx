@@ -118,7 +118,7 @@ const AdminLayout = () => {
               <div className="w-8 h-8 bg-orange-500 rounded-full mr-3"></div>
               <div>
                 <div className="font-medium text-gray-900">Admin User</div>
-                <div>admin@example.com</div>
+                <div>admin@gmail.com</div>
               </div>
             </div>
           </div>

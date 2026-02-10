@@ -53,7 +53,7 @@ export const getUserBooking = async (req, res) => {
     const booking = await Booking.find({ user: id }).sort({
       createdAt: -1,
     });
-    res.status(200).json(booking);
+    res.status(200).json({ booking, success: true });
   } catch (error) {
     console.log(error);
     return res.json({ message: 'Internal server error', success: false });

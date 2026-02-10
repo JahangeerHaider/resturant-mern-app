@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState,useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import AppContext from '../../context/AppContext';
 
@@ -10,7 +10,6 @@ const Orders = () => {
   // const fecthOrders = async () => {
   //   try {
   //     const { data } = await axios.get('/api/order/orders');
-     
 
   //     if (data.success) {
   //       setOrders(data.orders);
@@ -21,18 +20,19 @@ const Orders = () => {
   //     console.log(error);
   //   }
   // };
-   const fetchOrders = useCallback(async () => {
-     try {
-       const { data } = await axios.get('/api/order/orders');
-       if (data.success) {
-         setOrders(data.orders);
-       } else {
-         console.log('Fetch Orders Error:', data.message);
-       }
-     } catch (error) {
-       console.log('Fetch Orders Error:', error);
-     }
-   }, [axios]);
+  const fetchOrders = useCallback(async () => {
+    try {
+      const { data } = await axios.get('/api/order/orders');
+
+      if (data.success) {
+        setOrders(data.orders);
+      } else {
+        console.log('Fetch Orders Error:', data.message);
+      }
+    } catch (error) {
+      console.log('Fetch Orders Error:', error);
+    }
+  }, [axios]);
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
@@ -54,11 +54,11 @@ const Orders = () => {
     }
   };
 
-   useEffect(() => {
-     if (admin) {
-       fetchOrders();
-     }
-   }, [admin, fetchOrders]);
+  useEffect(() => {
+    if (admin) {
+      fetchOrders();
+    }
+  }, [admin, fetchOrders]);
   return (
     <div className="py-24 px-3 sm:px-6">
       <h1 className="text-3xl font-bold text-center my-3">All Orders</h1>

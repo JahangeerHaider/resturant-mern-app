@@ -18,7 +18,7 @@ import toast from 'react-hot-toast';
 
 
 const Navbar = () => {
-  const { navigate, user,axios,setUser, } = useContext(AppContext);
+  const { navigate, user,axios,setUser,cartCount } = useContext(AppContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -81,7 +81,7 @@ const Navbar = () => {
             >
               <ShoppingCart size={22} className="text-gray-700" />
               <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
-                3 {/* {cartCount > 0 ? cartCount : 0} */}
+                 {cartCount > 0 ? cartCount : 0}
               </span>
             </button>
             {/* Login/Profile - Desktop */}

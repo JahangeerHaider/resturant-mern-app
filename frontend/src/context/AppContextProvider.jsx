@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useMemo } from 'react';
+import { toast } from 'react-hot-toast';
 import AppContext from './AppContext';
 import axios from 'axios';
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
@@ -16,6 +17,54 @@ export const AppContextProvider = ({ children }) => {
   });
   const [categories, setCategories] = useState([]);
   const [menus, setMenus] = useState([]);
+  const [cart, setCart] = useState([]);
+
+
+  const fetchCartData = async () => {
+    try {
+      const { data } = await axios.get('/api/cart/all');
+      if (data.success) {
+        setCart(data.cart);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
+
+  const totalPrice = useMemo(() => {
+    return (
+      cart?.items?.reduce(
+        (sum, item) => sum + item.menuItem.price * item.quantity,
+        0,
+      ) || 0
+    );
+  }, [cart]);
+
+  const cartCount = useMemo(() => {
+    return cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+  }, [cart]);
+
+
+
+  const addToCart = async (menuId) => {
+    try {
+      const { data } = await axios.post('/api/cart/add', {
+        menuId,
+        quantity: 1,
+      });
+      if (data.success) {
+        toast.success(data.message);
+        fetchCartData();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      toast.error('Something went wrong!');
+    }
+  };
 
   const fetchCategories = async () => {
     try {
@@ -29,20 +78,19 @@ export const AppContextProvider = ({ children }) => {
       console.log(error);
     }
   };
- const fetchMenus = async () => {
-   try {
-     const { data } = await axios.get('/api/menu/all');
+  const fetchMenus = async () => {
+    try {
+      const { data } = await axios.get('/api/menu/all');
 
-     if (data.success) {
-       setMenus(data.menuItems);
-     } else {
-       console.log('Failed to fetch menus');
-     }
-   } catch (error) {
-     console.log('Error fetching menus:', error);
-   }
- };
-
+      if (data.success) {
+        setMenus(data.menuItems);
+      } else {
+        console.log('Failed to fetch menus');
+      }
+    } catch (error) {
+      console.log('Error fetching menus:', error);
+    }
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -53,7 +101,9 @@ export const AppContextProvider = ({ children }) => {
         }
 
         await fetchCategories();
-        await fetchMenus();
+        await fetchMenus(); 
+        await fetchCartData();
+
       } catch (error) {
         console.log(error);
       }
@@ -76,6 +126,11 @@ export const AppContextProvider = ({ children }) => {
     fetchCategories,
     menus,
     fetchMenus,
+    addToCart,
+    cart,
+    totalPrice,
+    cartCount,
+    fetchCartData,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

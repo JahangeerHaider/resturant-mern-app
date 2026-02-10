@@ -3,7 +3,7 @@ import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
-    <div className="py-18">
+    
       <footer className="flex flex-col items-center justify-center w-full py-10 bg-sky-800 from-[#5524B7] to-[#380B60] text-white/70">
         <Link to="/">
           <img src={logo} alt="logo image" className="w-45" />
@@ -87,7 +87,7 @@ const Footer = () => {
           </a>
         </div>
       </footer>
-    </div>
+   
   );
 };
 

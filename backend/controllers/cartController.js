@@ -70,3 +70,26 @@ export const removeFromCart = async (req, res) => {
     return res.json({ message: 'Internal server error', success: false });
   }
 };
+
+// update cart item quantity............
+export const updateCartQuantity = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { menuId, quantity } = req.body;
+
+    const cart = await Cart.findOne({ user: id });
+    if (!cart) return res.status(404).json({ success: false });
+
+    const item = cart.items.find((i) => i.menuItem._id.toString() === menuId);
+
+    if (!item) return res.status(404).json({ success: false });
+
+    item.quantity = quantity;
+
+    await cart.save();
+
+    res.json({ success: true, cart });
+  } catch (err) {
+    res.json({ success: false });
+  }
+};

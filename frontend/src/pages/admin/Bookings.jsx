@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState,useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import AppContext from '../../context/AppContext';
 
 const Bookings = () => {
-  const { admin, axios, loading, setLoading } = useContext(AppContext)
+  const { admin, axios, loading, setLoading } = useContext(AppContext);
   const [bookings, setBookings] = useState([]);
 
   // const fecthBookings = async () => {
@@ -25,13 +25,13 @@ const Bookings = () => {
       const { data } = await axios.get('/api/booking/all-bookings');
       if (data.success) {
         setBookings(data.bookings);
-      }else {
+      } else {
         console.log(data.message);
       }
     } catch (error) {
       console.log(error);
     }
-  }, [axios]); 
+  }, [axios]);
 
   const handleStatusChange = async (bookingId, newStatus) => {
     try {
