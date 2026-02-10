@@ -23,7 +23,7 @@ connectCloudinary();
 app.use(express.json());
 app.use(
   cors({
-    origin: 'https://resturant-mern-app.vercel.app/',
+    origin: 'https://resturant-mern-app.vercel.app',
     credentials: true,
   }),
 );
