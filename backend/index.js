@@ -14,6 +14,7 @@ import bookingRoute from './routes/bookingRoute.js';
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', 1);
 // DB connection
 connectDB();
 // cloudinary connection

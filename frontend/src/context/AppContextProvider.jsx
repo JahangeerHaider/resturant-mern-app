@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState,useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
 import AppContext from './AppContext';
 import axios from 'axios';
@@ -19,7 +19,6 @@ export const AppContextProvider = ({ children }) => {
   const [menus, setMenus] = useState([]);
   const [cart, setCart] = useState([]);
 
-
   const fetchCartData = async () => {
     try {
       const { data } = await axios.get('/api/cart/all');
@@ -30,8 +29,6 @@ export const AppContextProvider = ({ children }) => {
       console.log(error);
     }
   };
-
-  
 
   const totalPrice = useMemo(() => {
     return (
@@ -45,8 +42,6 @@ export const AppContextProvider = ({ children }) => {
   const cartCount = useMemo(() => {
     return cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
   }, [cart]);
-
-
 
   const addToCart = async (menuId) => {
     try {
@@ -92,20 +87,44 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       const { data } = await axios.get('/api/auth/is-auth');
+  //       if (data.success) {
+  //         setUser(data.user);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //     await fetchCategories();
+  //     await fetchMenus();
+  //     await fetchCartData();
+  //   };
+    
+
+  //   init();
+  // }, []);
   useEffect(() => {
     const init = async () => {
+      // 1) Auth check (allow 401)
       try {
         const { data } = await axios.get('/api/auth/is-auth');
-        if (data.success) {
-          setUser(data.user);
-        }
-
-        await fetchCategories();
-        await fetchMenus(); 
-        await fetchCartData();
-
+        if (data.success) setUser(data.user);
       } catch (error) {
-        console.log(error);
+        // 401 is normal when user is not logged in
+        if (error?.response?.status !== 401) console.log(error);
+      }
+
+      // 2) Public data should load even if not logged in
+      await fetchCategories();
+      await fetchMenus();
+
+      // 3) Cart is probably protected; ignore 401
+      try {
+        await fetchCartData();
+      } catch (error) {
+        if (error?.response?.status !== 401) console.log(error);
       }
     };
 
